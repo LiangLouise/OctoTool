@@ -10,8 +10,7 @@ namespace OctoTool
         public static void Main(string[] args)
         {
             var client = createClient();
-            var settins = new SingleProjectDeploymentSettings();
-            Console.WriteLine(settins.UpdateVariableSetNow.ToString());
+            
         }
 
          static WebClient createClient()
