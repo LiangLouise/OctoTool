@@ -10,9 +10,9 @@ namespace OctoTool.SettingExtensions
         public string[] SpecificMachineNames { get; set; }
         public DateTime DeployAt { get; set; }
         
+        public virtual bool WaitingForFinish { get; set; } = true;
         public bool Force { get; set; }
         public bool UseGuidedFailure { get; set; }
-        public bool WaitingForFinish = true;
         public bool UpdateVariableSetNow { get; set; }
         public string Comments { get; set; }
         
@@ -40,5 +40,7 @@ namespace OctoTool.SettingExtensions
         {
             return list;
         }
+        
+        
     }
 }

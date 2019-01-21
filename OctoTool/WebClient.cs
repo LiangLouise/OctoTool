@@ -2,7 +2,6 @@ using Octopus.Client;
 using Octopus.Client.Model;
 using Octopus.Client.Repositories;
 using OctoTool.Exception;
-using ITaskRepository = Octopus.Client.Repositories.Async.ITaskRepository;
 
 namespace OctoTool
 {
@@ -58,6 +57,11 @@ namespace OctoTool
         {
             return _repo.Machines.FindByName(machineName);
         }
+        
+        public IMachineRepository GetMachineRepo()
+        {
+            return _repo.Machines;
+        }
       
         public IReleaseRepository GetReleaseRepo()
         {
@@ -77,6 +81,11 @@ namespace OctoTool
         public IFeedRepository GetFeedRepo()
         {
             return _repo.Feeds;
+        }
+
+        public ITaskRepository GetTaskRepo()
+        {
+            return _repo.Tasks;
         }
 
     }

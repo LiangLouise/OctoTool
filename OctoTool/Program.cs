@@ -10,7 +10,7 @@ namespace OctoTool
         public static void Main(string[] args)
         {
             var client = createClient();
-            
+            CheckConnectivity(client);
         }
 
          static WebClient createClient()
@@ -47,7 +47,7 @@ namespace OctoTool
          // projects in the group to promote the latest release from one env to another (Unspecified the release version)
          static void PromoteMultiProjects()
          {
-             var settings = new GroupDeploymentSettings()
+             var settings = new GroupDeploymentPromotingSettings()
              {
                  DeployAt = new DateTime(2019,1, 18,0, 0,0),
                  ProjectsToExclude = new []{"WebApiMap", "", ""},
@@ -56,6 +56,20 @@ namespace OctoTool
                  TargetEnvironmentName = EnvironmentData.SPRINTQA
              };
              ChainDeployments.DeployProjectGroup("Data Services", settings);
+         }
+
+         static void CheckConnectivity(WebClient client)
+         {
+             var description = "Check Connectivity to RDSPRDEV-VAPP1 ";
+             var timeoutAfterMinutes = 2;
+             var machineTimeoutAfterMinutes = 1;             
+             var machine = client.GetMachineByName("RDSPRDEV-VAPP1");
+             var repo = client.GetTaskRepo();
+             var task = new OctoTask(repo.ExecuteHealthCheck(description, timeoutAfterMinutes, machineTimeoutAfterMinutes, 
+             null,
+              new
+                 string[] {machine.Id}));
+             task.PrintCurrentState();
          }
     }
 }

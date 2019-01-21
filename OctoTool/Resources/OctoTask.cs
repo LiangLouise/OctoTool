@@ -10,7 +10,7 @@ namespace OctoTool
         
         public OctoTask(string taskId)
         {
-            var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
+            var taskRepo = WebClient.GetWebClientRef().GetTaskRepo();
             Task = taskRepo.Get(taskId);
             TaskDetails = taskRepo.GetDetails(Task);
         }
@@ -18,6 +18,11 @@ namespace OctoTool
         public OctoTask(DeploymentResource deployment)
         {
             Task = WebClient.GetWebClientRef().GetOctopusRepository().Tasks.Get(deployment.TaskId);
+        }
+
+        public OctoTask(TaskResource task)
+        {
+           Task = task;
         }
         
         public static OctoTask GetDeploymentTask(DeploymentResource deployment)

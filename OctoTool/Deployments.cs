@@ -82,7 +82,7 @@ namespace OctoTool
         /// <param name="settings"></param>
         /// <returns></returns>
         public static DeploymentResource PromoteRelease(OctoProject project, EnvironmentResource sourceEnv, 
-        EnvironmentResource targetEnv, PromoteReleaseSettings settings)
+        EnvironmentResource targetEnv, SingleReleasePromotingSettings settings)
         {
             if (settings.Release == null)
             {
@@ -93,7 +93,7 @@ namespace OctoTool
             return CreateDeployment(project, settings.Release, targetEnv.Name);
         }
         
-        public static DeploymentResource PromoteRelease(string projectName, string releaseVersion, PromoteReleaseSettings settings)
+        public static DeploymentResource PromoteRelease(string projectName, string releaseVersion, SingleReleasePromotingSettings settings)
         {
             var project = new OctoProject(projectName);
             var sourceEnv = Environments.GetEnvironmentByName(settings.SourceEnvironmentName);
@@ -105,7 +105,7 @@ namespace OctoTool
         public static DeploymentResource PromoteRelease(string projectName, string sourceEnvName, string targetEnvName,
                     string releaseVersion = null)
                 {
-                    var settings = new PromoteReleaseSettings()
+                    var settings = new SingleReleasePromotingSettings()
                     {
                         SourceEnvironmentName = sourceEnvName,
                         TargetEnvironmentName = targetEnvName,
@@ -113,7 +113,7 @@ namespace OctoTool
                     return PromoteRelease(projectName, releaseVersion, settings);
                 }
         
-        public static DeploymentResource PromoteRelease(string projectName, PromoteReleaseSettings settings)
+        public static DeploymentResource PromoteRelease(string projectName, SingleReleasePromotingSettings settings)
         {
             return PromoteRelease(projectName, null, settings);
         }
