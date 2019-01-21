@@ -10,7 +10,6 @@ namespace OctoTool
         public static void Main(string[] args)
         {
             var client = createClient();
-            Console.Out.WriteLine("hello");
             
         }
 
