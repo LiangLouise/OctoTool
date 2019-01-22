@@ -55,13 +55,13 @@
     <Compile Include="Data\ChannelData.cs" />
     <Compile Include="Data\EnvironmentData.cs" />
     <Compile Include="Deployments.cs" />
-    <Compile Include="Environments.cs" />
     <Compile Include="Exception\DeploymentSettingsMissingException.cs" />
     <Compile Include="Exception\OctopusRepoNotConnectedException.cs" />
     <Compile Include="Exception\PackageNotFoundException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Releases.cs" />
+    <Compile Include="Resources\OctoMachines.cs" />
     <Compile Include="Resources\OctoProject.cs" />
     <Compile Include="Resources\OctoTask.cs" />
     <Compile Include="SettingExtensions\MultiReleasePromotingSettings.cs" />

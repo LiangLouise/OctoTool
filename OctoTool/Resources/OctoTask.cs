@@ -65,6 +65,22 @@ namespace OctoTool
             }
         }
 
+        public TaskState GetResultState()
+        {
+            var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
+            taskRepo.WaitForCompletion(Task);
+            Task = taskRepo.Refresh(Task);
+            return Task.State;
+        }
+
+        public void ReRun()
+        {
+            var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
+            taskRepo.Rerun(Task);
+            Task = taskRepo.Refresh(Task);
+            PrintCurrentState();
+        }
+
         
     }
 }

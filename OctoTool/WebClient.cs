@@ -88,5 +88,19 @@ namespace OctoTool
             return _repo.Tasks;
         }
 
+        public IEnvironmentRepository GetEnvironmentRepo()
+        {
+            return _repo.Environments;
+        }
+        
+        public EnvironmentResource GetEnvironmentByName(string environmentName)
+        {
+            return GetEnvironmentRepo().FindByName(environmentName);
+        }
+
+        public string GetEnvironmentIdByName(string environmentName)
+        {
+            return GetEnvironmentByName(environmentName).Id;
+        }
     }
 }

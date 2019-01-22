@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Threading;
 using OctoTool.Data;
 using OctoTool.SettingExtensions;
 
@@ -10,7 +12,7 @@ namespace OctoTool
         public static void Main(string[] args)
         {
             var client = createClient();
-            CheckConnectivity(client);
+            CheckConnectivity();
         }
 
          static WebClient createClient()
@@ -58,18 +60,14 @@ namespace OctoTool
              ChainDeployments.DeployProjectGroup("Data Services", settings);
          }
 
-         static void CheckConnectivity(WebClient client)
+         static void CheckConnectivity()
          {
-             var description = "Check Connectivity to RDSPRDEV-VAPP1 ";
-             var timeoutAfterMinutes = 2;
-             var machineTimeoutAfterMinutes = 1;             
-             var machine = client.GetMachineByName("RDSPRDEV-VAPP1");
-             var repo = client.GetTaskRepo();
-             var task = new OctoTask(repo.ExecuteHealthCheck(description, timeoutAfterMinutes, machineTimeoutAfterMinutes, 
-             null,
-              new
-                 string[] {machine.Id}));
-             task.PrintCurrentState();
+             List<string> roles = new List<string>();
+             roles.Add("iis-portal");
+             var machines = OctoMachines.GetMachinesByEnvName(EnvironmentData.SPRINTDEV, roles);
+             var task = machines.CheckConnectivityToMachines();
+             Thread.Sleep(30000);
+             task.ReRun();
          }
     }
 }

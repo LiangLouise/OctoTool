@@ -27,7 +27,7 @@ namespace OctoTool
             {
                 ReleaseId = release.Id,
                 ProjectId = project.GetProjectId(),
-                EnvironmentId = Environments.GetEnvironmentIdByName(settings.TargetEnvironmentName),
+                EnvironmentId = WebClient.GetWebClientRef().GetEnvironmentIdByName(settings.TargetEnvironmentName),
                 SpecificMachineIds = settings.ConvertMachineNames(),
                 Comments = settings.Comments,
                 UseGuidedFailure = settings.UseGuidedFailure,
@@ -96,8 +96,8 @@ namespace OctoTool
         public static DeploymentResource PromoteRelease(string projectName, string releaseVersion, SingleReleasePromotingSettings settings)
         {
             var project = new OctoProject(projectName);
-            var sourceEnv = Environments.GetEnvironmentByName(settings.SourceEnvironmentName);
-            var targetEnv = Environments.GetEnvironmentByName(settings.TargetEnvironmentName);
+            var sourceEnv = WebClient.GetWebClientRef().GetEnvironmentByName(settings.SourceEnvironmentName);
+            var targetEnv = WebClient.GetWebClientRef().GetEnvironmentByName(settings.TargetEnvironmentName);
             settings.Release = releaseVersion is null ? null : project.GetReleaseByVersion(releaseVersion);
             return PromoteRelease(project, sourceEnv, targetEnv, settings);
         }

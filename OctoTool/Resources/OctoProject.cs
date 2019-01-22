@@ -110,7 +110,7 @@ namespace OctoTool
 
         public DeploymentResource GetDeployment(string environmentName, string releaseVersion = null)
         {
-            var env = Environments.GetEnvironmentByName(environmentName);
+            var env = WebClient.GetWebClientRef().GetEnvironmentByName(environmentName);
             var release = releaseVersion is null ? null : GetReleaseByVersion(releaseVersion);
             return GetDeployment(env, release);
         }
@@ -124,7 +124,7 @@ namespace OctoTool
         public void CreateDeployment(ReleaseResource release, string targetEnvironment)
         {
             var repo = WebClient.GetWebClientRef().GetOctopusRepository();
-            var environmentId = Environments.GetEnvironmentIdByName(targetEnvironment);
+            var environmentId = WebClient.GetWebClientRef().GetEnvironmentIdByName(targetEnvironment);
             //creating the deployment object
             var deployment = new DeploymentResource
             {
