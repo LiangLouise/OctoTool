@@ -10,10 +10,13 @@ namespace OctoTool
     public class OctoMachines
     {
         public List<MachineResource> Machines;
+        public List<string> IdList;
+        public List<string> NameList;
 
         private OctoMachines(List<MachineResource> machines)
         {
             Machines = machines;
+            GetLists();
         }
                
         public static OctoMachines GetMachinesByEnvName(string environmentName, List<string> roles = null)
@@ -40,6 +43,11 @@ namespace OctoTool
             return new OctoMachines(res);
         }
 
+        public static OctoMachines GetMachinesByEnvName(string environmentName, string[] roles)
+        {
+            return GetMachinesByEnvName(environmentName, roles.ToList());
+        }
+
         public static OctoMachines GetMachinesByMachineName(List<string> machineNames)
         {
             List<MachineResource> res = new List<MachineResource>();
@@ -57,39 +65,26 @@ namespace OctoTool
             return GetMachinesByMachineName(machineNames);
         }
 
-        public List<string> GetMachinesIdList()
+        private void GetLists()
         {
-            List<string> IdList = new List<string>();
+            IdList = new List<string>();
+            NameList = new List<string>();
             foreach (var machine in Machines)
             {
+                NameList.Add(machine.Name);
                 IdList.Add(machine.Id);   
             }
-
-            return IdList;
-        }
-
-        public List<string> GetMachinesNameList()
-        {
-            List<string> nameList = new List<string>();
-            foreach (var machine in Machines)
-            {
-                nameList.Add(machine.Name);   
-            }
-
-            return nameList;
         }
 
         public OctoTask CheckConnectivityToMachines(string description = null)
         {
-            var client = WebClient.GetWebClientRef();
-            description = description ?? $"Checking Connectivity to {string.Join(", ", GetMachinesNameList().Take(4).ToArray())}";
-            var idList = GetMachinesIdList();
-            var repo = client.GetTaskRepo();
+            var repo = WebClient.GetWebClientRef().GetTaskRepo();
+            description = description ?? $"Checking Connectivity to {string.Join(", ", NameList.Take(4).ToArray())}";
             var timeOutAfterMinutes = int.Parse(ConfigurationManager.AppSettings["TimeOutAfterMinutes"]);
             var machineTimeoutAfterMinutes = int.Parse(ConfigurationManager.AppSettings["MachineTimeoutAfterMinutes"]);
             var task = new OctoTask(repo.ExecuteHealthCheck(description, timeOutAfterMinutes, machineTimeoutAfterMinutes, 
                 null,
-                idList.ToArray()));
+                IdList.ToArray()));
             task.PrintCurrentState();
             return task;
         }
@@ -107,6 +102,23 @@ namespace OctoTool
             }
 
             return task.GetResultState() == TaskState.Success;
+        }
+
+        public OctoTask ExecuteScripts(string scriptBody, string description = null, string syntaxType = "PowerShell")
+        {
+            var repo = WebClient.GetWebClientRef().GetTaskRepo();
+            description = description ?? $"Running Scripts against {string.Join(", ", NameList.Take(4).ToArray())}";
+            var task = new OctoTask(repo.ExecuteAdHocScript(scriptBody, IdList.ToArray(), null, null, description, syntaxType));
+            task.PrintCurrentState();
+            return task;
+        }
+        /// <summary>
+        /// Restart the servers now.
+        /// </summary>
+        /// <returns></returns>
+        public OctoTask RestartServer()
+        {
+            return ExecuteScripts(ConfigurationManager.AppSettings["RestartScript"]);
         }
     }
 }

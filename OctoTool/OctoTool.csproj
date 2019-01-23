@@ -33,6 +33,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Octodiff, Version=1.2.1.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\Octodiff.1.2.1\lib\net40\Octodiff.exe</HintPath>
       <Private>True</Private>
@@ -51,16 +55,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChainDeployments.cs" />
     <Compile Include="Data\ChannelData.cs" />
+    <Compile Include="Data\DataHelpers.cs" />
     <Compile Include="Data\EnvironmentData.cs" />
-    <Compile Include="Deployments.cs" />
+    <Compile Include="Data\RolesData.cs" />
+    <Compile Include="Devops.cs" />
     <Compile Include="Exception\DeploymentSettingsMissingException.cs" />
     <Compile Include="Exception\OctopusRepoNotConnectedException.cs" />
     <Compile Include="Exception\PackageNotFoundException.cs" />
+    <Compile Include="Opertaions\ChainDeployments.cs" />
+    <Compile Include="Opertaions\Deployments.cs" />
+    <Compile Include="Opertaions\Releases.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Releases.cs" />
     <Compile Include="Resources\OctoMachines.cs" />
     <Compile Include="Resources\OctoProject.cs" />
     <Compile Include="Resources\OctoTask.cs" />
@@ -68,13 +75,18 @@
     <Compile Include="SettingExtensions\SingleProjectDeploymentSettings.cs" />
     <Compile Include="SettingExtensions\CreateReleaseSettings.cs" />
     <Compile Include="SettingExtensions\MultiProjectsDeploymentSettings.cs" />
-    <Compile Include="SettingExtensions\GroupDeploymentPromotingSettings.cs" />
+    <Compile Include="SettingExtensions\GroupPromotingSettings.cs" />
     <Compile Include="SettingExtensions\SingleReleasePromotingSettings.cs" />
     <Compile Include="WebClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DevopsProjects.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

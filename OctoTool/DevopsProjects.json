@@ -1,0 +1,72 @@
+{
+  "DevOpsProjects": {
+    "initial": "Provisioning - Script",
+    "others": [
+      "Provisioning - Default Web Site",
+      "Provisioning - Internal Web Site",
+      "Provisioning - Web Web Site",
+      "Provisioning - MachineConfig",
+      "Provisioning - Certificates",
+      "Provisioning - Host File",
+      "Common Application",
+      "Machine Schedule Task",
+      "DevOps SupportPassword",
+      "DevOps Health",
+      "DevOps Deploy NSSM",
+      "DevOps - Install .Net Framework",
+      "DevOps - Install .Net Core",
+      "Boomerang Metrics",
+      "AppInsight-IISInstall",
+      "DevOps Install Windows Management Framework"
+    ]
+  },
+  "ProjectsGroupsToDeploy": [
+    {
+      "Name": "Data Services",
+      "ProjectsToExclude" : ["DataService HOSEvent"],
+      "SpecificProjectsToInclude": [],
+      "WaitingForFinish" : false,
+      "UpdateVariableSetNow" : true
+    },
+    {
+      "Name": "Telematics",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "FC Desktop",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "SDS",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Core Services",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Micro Services",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Mobile",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Mobile",
+      "ProjectsToExclude" : [],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Mobile",
+      "ProjectsToExclude" : ["Mongo TranslationSync"],
+      "WaitingForFinish" : false
+    }
+  ] 
+}
