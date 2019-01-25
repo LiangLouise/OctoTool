@@ -33,7 +33,8 @@ namespace OctoTool
                 throw new DeploymentSettingsMissingException("Please make sure both envs name are set up");
             }
             
-            if(settings.SpecificProjectsToInclude.Length == 0){
+            if(settings.SpecificProjectsToInclude.Length == 0)
+            {
                 foreach (var project in projects)
                 {
                     var projectName = project.Name;

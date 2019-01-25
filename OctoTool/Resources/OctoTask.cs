@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using Octopus.Client.Model;
 
 namespace OctoTool
@@ -39,9 +40,14 @@ namespace OctoTool
         {
             var startTime = Task.StartTime ?? DateTimeOffset.Now;
             var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
+            var webPageLink = ConfigurationManager.AppSettings["OctoBaseUrl"] + Task.Link("Web");
             Console.WriteLine($"{Task.Name} Starts will start at {startTime}");
-            
-            if (!waitForCompletion) return;
+            Console.WriteLine($"Task Link: {webPageLink}");
+            if (!waitForCompletion)
+            {
+                Console.WriteLine("Not Wait for Completion, Start Next Task/n");
+                return;
+            };
 
             taskRepo.WaitForCompletion(Task);
 
@@ -50,19 +56,21 @@ namespace OctoTool
             switch (Task.State)
             {
                 case TaskState.Success:
-                    Console.WriteLine("Task is finished successfully at {0}, taking {1}", endTime.LocalDateTime,
+                    Console.WriteLine("Task is finished successfully at {0}, taking {1}/n", endTime.LocalDateTime,
                         endTime - startTime);
                     break;
                 case TaskState.Failed:
-                    Console.WriteLine("Task failed at {0}, taking {1}", endTime.LocalDateTime,
+                    Console.WriteLine("Task failed at {0}, taking {1}/n", endTime.LocalDateTime,
                         endTime - startTime);
                     Console.WriteLine(Task.ErrorMessage);
                     break;
                 case TaskState.Canceled:
-                    Console.WriteLine("Task got canceled at {0}, taking {1}", endTime.LocalDateTime,
+                    Console.WriteLine("Task got canceled at {0}, taking {1}/n", endTime.LocalDateTime,
                         endTime - startTime);
                     break;
             }
+
+            
         }
 
         public TaskState GetResultState()

@@ -11,14 +11,17 @@ namespace OctoTool
         {   
             var client = WebClient.GetWebClientRef();
             // Check if the project has been disabled
-            if (project.IsDisabled() || settings.Force)
+            if (project.IsDisabled() || settings.Force || release == null)
             {
                 return null;
             }
 
+            Console.WriteLine($"Starting to Create Deployment for {project.ProjectName}");
             // Update the variable set           
             if (settings.UpdateVariableSetNow)
             {
+                Console.WriteLine($"Update Release {release.Version} variables now");
+                
                 release = client.GetReleaseRepo().SnapshotVariables(release);
             }
             
@@ -55,7 +58,7 @@ namespace OctoTool
             var settings = new SingleProjectDeploymentSettings {TargetEnvironmentName = targetEnvironmentName};
             return CreateDeployment(project, release, settings);
         }
-
+        
         public static DeploymentResource CreateDeployment(string projectName, string releaseVersion,
             SingleProjectDeploymentSettings settings)
         {
@@ -79,29 +82,26 @@ namespace OctoTool
         /// </summary>
         /// <param name="project"></param>
         /// <param name="sourceEnv"></param>
-        /// <param name="targetEnv"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
         public static DeploymentResource PromoteRelease(OctoProject project, EnvironmentResource sourceEnv, 
-        EnvironmentResource targetEnv, SingleReleasePromotingSettings settings)
+        SingleReleasePromotingSettings settings)
         {
             if (settings.Release == null)
-            {
-                var ReleaseRepo = WebClient.GetWebClientRef().GetOctopusRepository().Releases;
+            { 
+                var releaseRepo = WebClient.GetWebClientRef().GetReleaseRepo();
                 var sourceDeploy = project.GetDeployment(sourceEnv);
-                settings.Release = ReleaseRepo.Get(sourceDeploy.ReleaseId);
+                settings.Release = sourceDeploy == null ? null : releaseRepo.Get(sourceDeploy.ReleaseId);
             }
-
-            return settings.Release == null ? null : CreateDeployment(project, settings.Release, targetEnv.Name);
+            return settings.Release == null ? null : CreateDeployment(project, settings.Release, new SingleProjectDeploymentSettings(settings));
         }
         
         public static DeploymentResource PromoteRelease(string projectName, string releaseVersion, SingleReleasePromotingSettings settings)
         {
             var project = new OctoProject(projectName);
             var sourceEnv = WebClient.GetWebClientRef().GetEnvironmentByName(settings.SourceEnvironmentName);
-            var targetEnv = WebClient.GetWebClientRef().GetEnvironmentByName(settings.TargetEnvironmentName);
             settings.Release = releaseVersion is null ? null : project.GetReleaseByVersion(releaseVersion);
-            return PromoteRelease(project, sourceEnv, targetEnv, settings);
+            return PromoteRelease(project, sourceEnv,  settings);
         }
         
         public static DeploymentResource PromoteRelease(string projectName, string sourceEnvName, string targetEnvName,

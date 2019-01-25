@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Octopus.Client.Model;
-using OctoTool.Exception;
-using OctoTool.SettingExtensions;
 
 namespace OctoTool
 {
@@ -86,7 +84,7 @@ namespace OctoTool
             }
 
             DeploymentResource lastDeployment = null;
-            foreach (var release in GetAllReleases())
+            foreach (var release in GetAllReleases().Take(5))
             {
                 foreach (var deploy in GetAllDeployment(release).Items)
                 {

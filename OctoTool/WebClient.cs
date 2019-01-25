@@ -43,9 +43,14 @@ namespace OctoTool
             return _client;
         }
 
+        public IProjectRepository GetProjectRepo()
+        {
+            return _repo.Projects;
+        }
+
         public ProjectResource GetProjectByName(string projectName)
         {
-            return _repo.Projects.FindByName(projectName);
+            return GetProjectRepo().FindByName(projectName);
         }
 
         public ProjectGroupResource GetGroupByName(string groupName)

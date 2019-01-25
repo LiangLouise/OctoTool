@@ -26,6 +26,7 @@ namespace OctoTool.Scripts
         {
             ProvisionServers();
             PromoteGroups();
+            PromoteProjects();
         }
             
         public void ProvisionServers()
@@ -39,12 +40,13 @@ namespace OctoTool.Scripts
             if (initial != null)
             {   
                 var times = 3;
-                for (int i = 0; i < times; i++)
-                            {
-                                Deployments.PromoteRelease(initial.ToString(), SourceEnvironmentName,
-                                    TargetEnvironmentName);
-                                ServersToReboot.RestartServer();
-                            }
+                for (int i = 0; i < times; i++)                  
+                {                   
+                    Deployments.PromoteRelease(initial.ToString(), SourceEnvironmentName,            
+                        TargetEnvironmentName);          
+                    ServersToReboot.RestartServer();
+                    
+                }
             }
 
             var others = devopsProjects["others"];
@@ -65,30 +67,66 @@ namespace OctoTool.Scripts
             var groups = Configs.Property("ProjectsGroupsToDeploy");
             if (groups == null) return;
               
-            foreach (var g in groups.Value["ProjectsGroups"])
+            foreach (var g in groups.Value)
             {
                 var name = g["Name"].ToString();
-                var time = g["WaitingForFinish"].ToString();
+                var time = g["DeployAt"];
                 var settings = new GroupPromotingSettings
+                {
+                    SourceEnvironmentName = SourceEnvironmentName,
+                    
+                    TargetEnvironmentName = TargetEnvironmentName,                  
+                    
+                    SpecificMachineNames = g["SpecificMachineNames"]?.ToObject<string[]>() ?? new string[0],
+                    
+                    ProjectsToExclude = g["ProjectsToExclude"]?.ToObject<string[]>() ?? new string[0],
+                    
+                    SpecificProjectsToInclude = g["SpecificProjectsToInclude"]?.ToObject<string[]>() ?? new string[0],
+                    
+                    WaitingForFinish = g["WaitingForFinish"]?.ToObject<bool>() ?? false,
+                    
+                    UseGuidedFailure = g["UseGuidedFailure"]?.ToObject<bool>() ?? false,
+                    
+                    UpdateVariableSetNow = g["UpdateVariableSetNow"]?.ToObject<bool>() ?? false,
+                    
+                    Force = g["Force"]?.ToObject<bool>() ?? false,
+                    
+                    DeployAt = time == null ? DateTime.Now  : DateTime.Parse(time.ToString())
+                    
+                };
+                ChainDeployments.PromoteProjectGroup(name, settings);
+            }
+        }
+
+        public void PromoteProjects()
+        {
+            var projects = Configs.Property("ProjectsToDeploy");
+            if (projects == null) return;
+
+            foreach (var g in projects.Value)
+            {
+                var name = g["Name"].ToString();
+                var time = g["DeployAt"];
+                var settings = new SingleReleasePromotingSettings()
                 {
                     SourceEnvironmentName = SourceEnvironmentName,
                     
                     TargetEnvironmentName = TargetEnvironmentName,
                     
-                    ProjectsToExclude = g["ProjectsToExclude"] == null ? new string[0] : g["ProjectsToExclude"]
-                                                        .ToObject<string[]>(),
+                    SpecificMachineNames = g["SpecificMachineNames"]?.ToObject<string[]>() ?? new string[0],
                     
-                    SpecificProjectsToInclude = g["SpecificProjectsToInclude"] == null ? new string[0] :
-                        g["SpecificProjectsToInclude"].ToObject<string[]>(),
+                    SkipSteps = g["SkipSteps"]?.ToObject<string[]>() ?? new string[0],
                     
                     WaitingForFinish = g["WaitingForFinish"]?.ToObject<bool>() ?? false,
                     
                     UpdateVariableSetNow = g["UpdateVariableSetNow"]?.ToObject<bool>() ?? false,
                     
-                    DeployAt =  DateTime.Parse(time)
+                    Force = g["Force"]?.ToObject<bool>() ?? false,
+                    
+                    DeployAt =  time == null ? DateTime.Now  : DateTime.Parse(time.ToString())
                     
                 };
-                ChainDeployments.PromoteProjectGroup(name, settings);
+                Deployments.PromoteRelease(name, settings);
             }
         }
     }

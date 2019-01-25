@@ -1,72 +1,29 @@
 {
-  "DevOpsProjects": {
-    "initial": "Provisioning - Script",
-    "others": [
-      "Provisioning - Default Web Site",
-      "Provisioning - Internal Web Site",
-      "Provisioning - Web Web Site",
-      "Provisioning - MachineConfig",
-      "Provisioning - Certificates",
-      "Provisioning - Host File",
-      "Common Application",
-      "Machine Schedule Task",
-      "DevOps SupportPassword",
-      "DevOps Health",
-      "DevOps Deploy NSSM",
-      "DevOps - Install .Net Framework",
-      "DevOps - Install .Net Core",
-      "Boomerang Metrics",
-      "AppInsight-IISInstall",
-      "DevOps Install Windows Management Framework"
-    ]
-  },
-  "ProjectsGroupsToDeploy": [
+  "ProjectsToDeploy": [
     {
-      "Name": "Data Services",
-      "ProjectsToExclude" : ["DataService HOSEvent"],
-      "SpecificProjectsToInclude": [],
+      "Name": "FC WebAPI",
       "WaitingForFinish" : false,
-      "UpdateVariableSetNow" : true
+      "UpdateVariableSetNow": true
     },
     {
-      "Name": "Telematics",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
+      "Name": "GeoServiceAPI",
+      "WaitingForFinish" : false,
+      "UpdateVariableSetNow": true
     },
     {
-      "Name": "FC Desktop",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
+      "Name": "Device Provisioning - API",
+      "WaitingForFinish" : false,
+      "UpdateVariableSetNow": true
     },
     {
-      "Name": "SDS",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
+      "Name": "AIE",
+      "WaitingForFinish" : false,
+      "UpdateVariableSetNow": true
     },
     {
-      "Name": "Core Services",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Micro Services",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Mobile",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Mobile",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Mobile",
-      "ProjectsToExclude" : ["Mongo TranslationSync"],
-      "WaitingForFinish" : false
+      "Name": "DevOps Health",
+      "WaitingForFinish" : false,
+      "UpdateVariableSetNow": true
     }
-  ] 
+  ]
 }
