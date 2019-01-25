@@ -113,12 +113,14 @@ namespace OctoTool
             return task;
         }
         /// <summary>
-        /// Restart the servers now.
+        /// Restart the servers now. And waiting for it bo back online
         /// </summary>
         /// <returns></returns>
-        public OctoTask RestartServer()
+        public bool RestartServer()
         {
-            return ExecuteScripts(ConfigurationManager.AppSettings["RestartScript"]);
+            Console.Out.WriteLine($"Start to Restarts Servers: {string.Join(", ", NameList.Take(4).ToArray())}");
+            ExecuteScripts(ConfigurationManager.AppSettings["RestartScript"]);
+            return WaitForMachinesBackOnline();
         }
     }
 }

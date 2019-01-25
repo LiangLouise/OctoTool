@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using OctoTool.Data;
+﻿using System.Configuration;
 using OctoTool.Scripts;
 
 namespace OctoTool
@@ -9,56 +7,8 @@ namespace OctoTool
     {
         public static void Main(string[] args)
         {
-            work(new[] {EnvironmentData.STAGING, EnvironmentData.PERFORMANCE, "DevopsProjects.json"});
+            work(args);
         }
-
-        public static void getlist()
-        {
-            var mongoId = "LibraryVariableSets-381";
-            var redisId = "LibraryVariableSets-501";
-            var rabbitId = "LibraryVariableSets-244";
-            var client = CreateClient();
-            var repo = client.GetProjectRepo();
-            foreach (var project in repo.GetAll())
-            {
-                
-                if(project.IsDisabled){ continue;}
-                
-                var p = new OctoProject(project);
-                if (p.GetDeployment(EnvironmentData.PERFORMANCE) == null)
-                {
-                    continue;
-                }
-                
-                var setList = project.IncludedLibraryVariableSetIds;
-                string line = project.Name;             
-                
-                if (setList.Contains(mongoId))
-                {
-                    line += " MongoDB ";                  
-                } 
-                
-                if (setList.Contains(redisId))
-                {
-                    line += " Redis ";
-                }
-                
-                
-                if (setList.Contains(rabbitId))                                                          
-                {                                                     
-                    line += " RabbitMQ ";
-                }
-
-                if (line.Length != project.Name.Length)
-                {
-                    Console.WriteLine(line);
-                }
-            }
-        }
-        
-        
-        
-        
         
         public static void work(string[] args)
         {
