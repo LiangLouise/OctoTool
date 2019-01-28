@@ -7,21 +7,18 @@ namespace OctoTool
     {
         public static void Main(string[] args)
         {
-            work(args);
+           if (args.Length < 3) return;
+                                   
+           var sourEnvName = args[0];
+           var targetEnvName = args[1];
+           var pathToConfigs = args[2];
+                                                                          
+           var client = CreateClient();      
+           
+           var devops = new Devops(sourEnvName, targetEnvName, pathToConfigs);            
+           devops.CreateDeployment();
         }
         
-        public static void work(string[] args)
-        {
-            if (args.Length < 3) return;
-                        var sourEnvName = args[0];
-                        var targetEnvName = args[1];
-                        var pathToConfigs = args[2];
-                            
-                        var client = CreateClient();
-                        var devops = new Devops(sourEnvName, targetEnvName, pathToConfigs);
-                            
-                        devops.CreateDeployment();
-        }
 
          static WebClient CreateClient()
          {
