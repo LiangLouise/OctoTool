@@ -34,7 +34,7 @@ namespace OctoTool.Scripts
             var devops = Configs.Property("DevOpsProjects");
             if(devops == null) return;
             
-            var devopsProjects = devops["DevOpsProjects"];
+            var devopsProjects = devops.Value;
             
             var initial = devopsProjects["initial"];
             if (initial != null)
