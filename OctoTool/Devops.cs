@@ -24,7 +24,7 @@ namespace OctoTool.Scripts
 
         public void CreateDeployment()
         {
-            ProvisionServers();
+            
             PromoteGroups();
             PromoteProjects();
         }
