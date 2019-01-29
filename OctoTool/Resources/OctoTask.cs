@@ -42,11 +42,11 @@ namespace OctoTool
             var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
             var webPageLink = ConfigurationManager.AppSettings["OctoBaseUrl"] + Task.Link("Web");
             Console.WriteLine($"{Task.Name} Starts will start at {startTime}");
-            Console.WriteLine($"Task Link: <a href=\"{webPageLink}\">{webPageLink}</a>");
+            Console.WriteLine($"Task Link: {webPageLink}");
             if (!waitForCompletion)
             {
                 Console.WriteLine("Not Wait for Completion, Start Next Task");
-                Console.WriteLine(Environment.NewLine);
+                Console.WriteLine("\n");
                 return;
             };
 
@@ -70,7 +70,7 @@ namespace OctoTool
                         endTime - startTime);
                     break;
             }
-            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine("\n");
 
             
         }
