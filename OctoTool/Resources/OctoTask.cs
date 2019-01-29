@@ -46,7 +46,7 @@ namespace OctoTool
             if (!waitForCompletion)
             {
                 Console.WriteLine("Not Wait for Completion, Start Next Task");
-                Console.WriteLine("\n");
+                Console.WriteLine("----------------------------------------");
                 return;
             };
 
@@ -70,9 +70,7 @@ namespace OctoTool
                         endTime - startTime);
                     break;
             }
-            Console.WriteLine("\n");
-
-            
+            Console.WriteLine("----------------------------------------");
         }
 
         public TaskState GetResultState()
