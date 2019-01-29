@@ -42,10 +42,11 @@ namespace OctoTool
             var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
             var webPageLink = ConfigurationManager.AppSettings["OctoBaseUrl"] + Task.Link("Web");
             Console.WriteLine($"{Task.Name} Starts will start at {startTime}");
-            Console.WriteLine($"Task Link: {webPageLink}");
+            Console.WriteLine($"Task Link: <a href=\"{webPageLink}\">{webPageLink}</a>");
             if (!waitForCompletion)
             {
-                Console.WriteLine("Not Wait for Completion, Start Next Task/n");
+                Console.WriteLine("Not Wait for Completion, Start Next Task");
+                Console.WriteLine(Environment.NewLine);
                 return;
             };
 
@@ -56,19 +57,20 @@ namespace OctoTool
             switch (Task.State)
             {
                 case TaskState.Success:
-                    Console.WriteLine("Task is finished successfully at {0}, taking {1}/n", endTime.LocalDateTime,
+                    Console.WriteLine("Task is finished successfully at {0}, taking {1}", endTime.LocalDateTime,
                         endTime - startTime);
                     break;
                 case TaskState.Failed:
-                    Console.WriteLine("Task failed at {0}, taking {1}/n", endTime.LocalDateTime,
+                    Console.WriteLine("Task failed at {0}, taking {1}", endTime.LocalDateTime,
                         endTime - startTime);
                     Console.WriteLine(Task.ErrorMessage);
                     break;
                 case TaskState.Canceled:
-                    Console.WriteLine("Task got canceled at {0}, taking {1}/n", endTime.LocalDateTime,
+                    Console.WriteLine("Task got canceled at {0}, taking {1}", endTime.LocalDateTime,
                         endTime - startTime);
                     break;
             }
+            Console.WriteLine(Environment.NewLine);
 
             
         }
@@ -89,6 +91,5 @@ namespace OctoTool
             PrintCurrentState();
         }
 
-        
     }
 }
