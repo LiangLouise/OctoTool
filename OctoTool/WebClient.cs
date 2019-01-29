@@ -97,6 +97,11 @@ namespace OctoTool
         {
             return _repo.Environments;
         }
+
+        public IChannelRepository GetChannelRepo()
+        {
+            return _repo.Channels;
+        }
         
         public EnvironmentResource GetEnvironmentByName(string environmentName)
         {

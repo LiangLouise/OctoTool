@@ -66,7 +66,6 @@ namespace OctoTool
             
         }
         
-
         /// <summary>
         /// Get the DeploymentResource at the input environment of specific release version.
         /// If the version is not specified, it will return the last deployment at the input environment
@@ -111,32 +110,30 @@ namespace OctoTool
             var env = WebClient.GetWebClientRef().GetEnvironmentByName(environmentName);
             var release = releaseVersion is null ? null : GetReleaseByVersion(releaseVersion);
             return GetDeployment(env, release);
-        }
-        
+        }        
         
         public string GetDeploymentProcessId()
         {
             return Curr.DeploymentProcessId;
         }
-       
-        public void CreateDeployment(ReleaseResource release, string targetEnvironment)
-        {
-            var repo = WebClient.GetWebClientRef().GetOctopusRepository();
-            var environmentId = WebClient.GetWebClientRef().GetEnvironmentIdByName(targetEnvironment);
-            //creating the deployment object
-            var deployment = new DeploymentResource
-            {
-                ReleaseId = release.Id,
-                ProjectId = GetProjectId(),
-                EnvironmentId = environmentId
-            };
-            repo.Deployments.Create(deployment);
-        }
 
-        public void CreateDeployment(string releaseVersion, string targetEnvironment)
+        public List<string> GetTargetRolesNameList()
         {
-            var release = GetReleaseByVersion(releaseVersion);
-            CreateDeployment(release, targetEnvironment);
+            var l = new List<string>();
+            var process = WebClient.GetWebClientRef().GetDeploymentProcessRepo().Get(GetDeploymentProcessId());
+            var steps = process.Steps;
+    
+            foreach (var s in steps)
+            {
+                if(!s.Properties.ContainsKey("Octopus.Action.TargetRoles")){continue;}
+                var role = s.Properties["Octopus.Action.TargetRoles"].Value;
+                if (!l.Contains(role) || role == null)
+                {
+                    l.Add(role);
+                }
+            }
+            
+            return l;
         }
     }
 }

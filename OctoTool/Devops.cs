@@ -24,7 +24,6 @@ namespace OctoTool.Scripts
 
         public void CreateDeployment()
         {
-            
             PromoteGroups();
             PromoteProjects();
         }
@@ -36,28 +35,20 @@ namespace OctoTool.Scripts
             
             var devopsProjects = devops.Value;
             
-            var initial = devopsProjects["initial"];
-            if (initial != null)
-            {   
-                var times = 3;
-                for (int i = 0; i < times; i++)                  
-                {                   
-                    Deployments.PromoteRelease(initial.ToString(), SourceEnvironmentName,            
-                        TargetEnvironmentName);          
-                    ServersToReboot.RestartServer();
-                    
-                }
-            }
-
-            var others = devopsProjects["others"];
-            if (others == null) return;
-            var settings = new MultiReleasePromotingSettings
+            var needReboot = devopsProjects["NeedReboot"];
+            if (needReboot == null) return;
+            var settings = new MultiReleasePromotingSettings()
             {
                 SourceEnvironmentName = SourceEnvironmentName,
                 TargetEnvironmentName = TargetEnvironmentName,
-                WaitingForFinish = true
+                WaitingForFinish = true,
+                NeedRebootAfterDeployment = true
             };
-                            
+            ChainDeployments.PromoteReleases(needReboot.ToObject<string[]>(), settings);
+
+            var others = devopsProjects["others"];            
+            if (others == null) return;
+            settings.NeedRebootAfterDeployment = false;                            
             ChainDeployments.PromoteReleases(devopsProjects["others"].ToObject<string[]>(), settings);
 
         }
@@ -66,10 +57,13 @@ namespace OctoTool.Scripts
         {
             var groups = Configs.Property("ProjectsGroupsToDeploy");
             if (groups == null) return;
-              
+
             foreach (var g in groups.Value)
             {
-                var name = g["Name"].ToString();
+                var name = g["Name"];
+                
+                if(name is null){continue;}                
+                Console.WriteLine($"Start to deploy ProjectsGroup {name}");
                 var time = g["DeployAt"];
                 var settings = new GroupPromotingSettings
                 {
@@ -94,7 +88,7 @@ namespace OctoTool.Scripts
                     DeployAt = time == null ? DateTime.Now  : DateTime.Parse(time.ToString())
                     
                 };
-                ChainDeployments.PromoteProjectGroup(name, settings);
+                ChainDeployments.PromoteProjectGroup(name.ToString(), settings);
             }
         }
 
@@ -102,10 +96,13 @@ namespace OctoTool.Scripts
         {
             var projects = Configs.Property("ProjectsToDeploy");
             if (projects == null) return;
-
+            Console.WriteLine("Start to deploy projects");
             foreach (var g in projects.Value)
             {
-                var name = g["Name"].ToString();
+                var name = g["Name"];
+                
+                if(name is null){continue;}
+                
                 var time = g["DeployAt"];
                 var settings = new SingleReleasePromotingSettings()
                 {
@@ -126,7 +123,7 @@ namespace OctoTool.Scripts
                     DeployAt =  time == null ? DateTime.Now  : DateTime.Parse(time.ToString())
                     
                 };
-                Deployments.PromoteRelease(name, settings);
+                Deployments.PromoteRelease(name.ToString(), settings);
             }
         }
     }

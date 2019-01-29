@@ -45,7 +45,8 @@ namespace OctoTool
             Console.WriteLine($"Task Link: {webPageLink}");
             if (!waitForCompletion)
             {
-                Console.WriteLine("Not Wait for Completion, Start Next Task/n");
+                Console.WriteLine("Not Wait for Completion, Start Next Task");
+                Console.WriteLine("----------------------------------------");
                 return;
             };
 
@@ -56,19 +57,20 @@ namespace OctoTool
             switch (Task.State)
             {
                 case TaskState.Success:
-                    Console.WriteLine("Task is finished successfully at {0}, taking {1}/n", endTime.LocalDateTime,
+                    Console.WriteLine("Task is finished successfully at {0}, taking {1}", endTime.LocalDateTime,
                         endTime - startTime);
                     break;
                 case TaskState.Failed:
-                    Console.WriteLine("Task failed at {0}, taking {1}/n", endTime.LocalDateTime,
+                    Console.WriteLine("Task failed at {0}, taking {1}", endTime.LocalDateTime,
                         endTime - startTime);
                     Console.WriteLine(Task.ErrorMessage);
                     break;
                 case TaskState.Canceled:
-                    Console.WriteLine("Task got canceled at {0}, taking {1}/n", endTime.LocalDateTime,
+                    Console.WriteLine("Task got canceled at {0}, taking {1}", endTime.LocalDateTime,
                         endTime - startTime);
                     break;
             }
+            Console.WriteLine("----------------------------------------");
 
             
         }

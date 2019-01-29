@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using OctoTool.Scripts;
 
 namespace OctoTool
@@ -12,9 +13,11 @@ namespace OctoTool
            var sourEnvName = args[0];
            var targetEnvName = args[1];
            var pathToConfigs = args[2];
-                                                                          
-           var client = CreateClient();      
            
+           Console.WriteLine("----------------------------------------");
+           Console.WriteLine($"Chain Deployments from {sourEnvName.ToUpper()} to {pathToConfigs.ToUpper()}");
+           var client = CreateClient();      
+           Console.WriteLine("Connected To Octopus Server");
            var devops = new Devops(sourEnvName, targetEnvName, pathToConfigs);            
            devops.CreateDeployment();
         }

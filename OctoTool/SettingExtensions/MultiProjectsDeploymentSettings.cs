@@ -14,9 +14,10 @@ namespace OctoTool.SettingExtensions
         public bool Force { get; set; }
         public bool UseGuidedFailure { get; set; }
         public bool UpdateVariableSetNow { get; set; }
+        public bool NeedRebootAfterDeployment { get; set; } = false;
+        
         public string Comments { get; set; }
         
-
         public MultiProjectsDeploymentSettings(){}
 
         public ReferenceCollection ConvertMachineNames()

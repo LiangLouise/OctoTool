@@ -9,13 +9,13 @@ namespace OctoTool
         public static DeploymentResource CreateDeployment(OctoProject project, ReleaseResource release, 
         SingleProjectDeploymentSettings settings)
         {   
-            var client = WebClient.GetWebClientRef();
+            var client = WebClient.GetWebClientRef();           
             // Check if the project has been disabled
             if (project.IsDisabled() || settings.Force || release == null)
             {
                 return null;
             }
-
+                                    
             Console.WriteLine($"Starting to Create Deployment for {project.ProjectName}");
             // Update the variable set           
             if (settings.UpdateVariableSetNow)
@@ -24,31 +24,44 @@ namespace OctoTool
                 
                 release = client.GetReleaseRepo().SnapshotVariables(release);
             }
+
+            if (settings.NeedRebootAfterDeployment)
+            {
+                settings.WaitingForFinish = true;
+            }
             
             //creating the deployment object
             var deployment = new DeploymentResource
             {
                 ReleaseId = release.Id,
                 ProjectId = project.GetProjectId(),
-                EnvironmentId = WebClient.GetWebClientRef().GetEnvironmentIdByName(settings.TargetEnvironmentName),
+                EnvironmentId = client.GetEnvironmentIdByName(settings.TargetEnvironmentName),
                 SpecificMachineIds = settings.ConvertMachineNames(),
                 Comments = settings.Comments,
                 UseGuidedFailure = settings.UseGuidedFailure,
                 SkipActions = settings.ConvertSkipSteps()
                 
-            };
+            };                       
+            
             // Schedule the deployment if deployment time is greater than now
             if (settings.DeployAt > DateTime.Now)
             {
                 deployment.QueueTime = new DateTimeOffset(settings.DeployAt);
                 settings.WaitingForFinish = false;
             }            
+            
             deployment = client.GetDeploymentRepo().Create(deployment);
             
             Console.WriteLine($"{project.ProjectName} will {deployment.Name}");
             
             var task = new OctoTask(deployment);
             task.PrintCurrentState(settings.WaitingForFinish);
+
+            if (!settings.NeedRebootAfterDeployment) return deployment;
+            var rolesNameList = project.GetTargetRolesNameList();
+            var mahcines = OctoMachines.GetMachinesByEnvName(settings.TargetEnvironmentName, rolesNameList);
+            mahcines.RestartServer();
+
             return deployment;
         }
 
@@ -119,7 +132,7 @@ namespace OctoTool
         public static DeploymentResource PromoteRelease(string projectName, SingleReleasePromotingSettings settings)
         {
             return PromoteRelease(projectName, null, settings);
-        }
+        }        
         
         
     }

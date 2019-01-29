@@ -60,10 +60,9 @@ namespace OctoTool
 
         public static OctoMachines GetMachinesByMachineName(string machineName)
         {
-            List<string> machineNames = new List<string>();
-            machineNames.Add(machineName);
+            var machineNames = new List<string> {machineName};
             return GetMachinesByMachineName(machineNames);
-        }
+        }        
 
         private void GetLists()
         {
@@ -121,6 +120,6 @@ namespace OctoTool
             Console.Out.WriteLine($"Start to Restarts Servers: {string.Join(", ", NameList.Take(4).ToArray())}");
             ExecuteScripts(ConfigurationManager.AppSettings["RestartScript"]);
             return WaitForMachinesBackOnline();
-        }
+        }       
     }
 }
