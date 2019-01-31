@@ -7,8 +7,6 @@ namespace OctoTool.Scripts
 {
     public class Devops
     {
-        public OctoMachines ServersToReboot;
-
         public string SourceEnvironmentName;
         public string TargetEnvironmentName;
         public JObject Configs;
@@ -17,13 +15,12 @@ namespace OctoTool.Scripts
         {
             SourceEnvironmentName = sourceEnvName;
             TargetEnvironmentName = targetEnvName;
-            Configs = DataHelpers.GetJsonContent(pathToSettings);
-            ServersToReboot = OctoMachines.GetMachinesByEnvName(targetEnvName, new 
-                []{RolesData.IIS, RolesData.MSMQ});
+            Configs = DataHelpers.GetJsonContent(pathToSettings);            
         }
 
         public void CreateDeployment()
         {
+            ProvisionServers();
             PromoteGroups();
             PromoteProjects();
         }
@@ -49,7 +46,7 @@ namespace OctoTool.Scripts
             var others = devopsProjects["others"];            
             if (others == null) return;
             settings.NeedRebootAfterDeployment = false;                            
-            ChainDeployments.PromoteReleases(devopsProjects["others"].ToObject<string[]>(), settings);
+            ChainDeployments.PromoteReleases(others.ToObject<string[]>(), settings);
 
         }
 

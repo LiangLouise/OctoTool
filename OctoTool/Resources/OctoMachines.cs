@@ -88,11 +88,11 @@ namespace OctoTool
             return task;
         }
 
-        public bool WaitForMachinesBackOnline(int checkInterval = 2, int runningTime = 10)
+        public bool WaitForMachinesBackOnline(int checkInterval = 1, int runningTime = 10)
         {
             var task = CheckConnectivityToMachines();
-            var i = 0;
-            while (task.GetResultState() != TaskState.Success && i < runningTime)
+            var i = 1;
+            while (task.GetResultState() != TaskState.Success || i < runningTime)
             {
                 double time = TimeSpan.FromMinutes(checkInterval).TotalMilliseconds;
                 Thread.Sleep(Convert.ToInt32(time));
@@ -111,6 +111,7 @@ namespace OctoTool
             task.PrintCurrentState();
             return task;
         }
+        
         /// <summary>
         /// Restart the servers now. And waiting for it bo back online
         /// </summary>

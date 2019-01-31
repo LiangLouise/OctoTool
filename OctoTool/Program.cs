@@ -15,7 +15,7 @@ namespace OctoTool
            var pathToConfigs = args[2];
            
            Console.WriteLine("----------------------------------------");
-           Console.WriteLine($"Chain Deployments from {sourEnvName.ToUpper()} to {pathToConfigs.ToUpper()}");
+           Console.WriteLine($"Chain Deployments from {sourEnvName.ToUpper()} to {targetEnvName.ToUpper()}");
            var client = CreateClient();      
            Console.WriteLine("Connected To Octopus Server");
            var devops = new Devops(sourEnvName, targetEnvName, pathToConfigs);            
@@ -25,7 +25,6 @@ namespace OctoTool
 
          static WebClient CreateClient()
          {
-             var reader = new AppSettingsReader();
              var url = ConfigurationManager.AppSettings["OctoBaseUrl"];
              var key = ConfigurationManager.AppSettings["OctoAPIKey"];
              return WebClient.CreateWebClientRef(url, key);

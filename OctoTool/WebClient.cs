@@ -28,7 +28,7 @@ namespace OctoTool
         {
             if (_reference is null)
             {
-                throw new OctopusRepoNotConnectedException("Please Connect to Your Octo Server first!");
+                throw new OctopusRepoNotConnectedException("Please Connect to Your Octopus Server first!");
             }
             return _reference;
         }
@@ -36,12 +36,7 @@ namespace OctoTool
         public OctopusRepository GetOctopusRepository()
         {
             return _repo;
-        }
-
-        public OctopusClient GetOctopusClient()
-        {
-            return _client;
-        }
+        }        
 
         public IProjectRepository GetProjectRepo()
         {
@@ -61,12 +56,7 @@ namespace OctoTool
         public MachineResource GetMachineByName(string machineName)
         {
             return _repo.Machines.FindByName(machineName);
-        }
-        
-        public IMachineRepository GetMachineRepo()
-        {
-            return _repo.Machines;
-        }
+        }        
       
         public IReleaseRepository GetReleaseRepo()
         {
@@ -96,11 +86,6 @@ namespace OctoTool
         public IEnvironmentRepository GetEnvironmentRepo()
         {
             return _repo.Environments;
-        }
-
-        public IChannelRepository GetChannelRepo()
-        {
-            return _repo.Channels;
         }
         
         public EnvironmentResource GetEnvironmentByName(string environmentName)

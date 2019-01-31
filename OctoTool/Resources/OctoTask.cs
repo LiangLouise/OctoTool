@@ -41,7 +41,7 @@ namespace OctoTool
             var startTime = Task.StartTime ?? DateTimeOffset.Now;
             var taskRepo = WebClient.GetWebClientRef().GetOctopusRepository().Tasks;
             var webPageLink = ConfigurationManager.AppSettings["OctoBaseUrl"] + Task.Link("Web");
-            Console.WriteLine($"{Task.Name} Starts will start at {startTime}");
+            Console.WriteLine($"{Task.Name} Will Start at {startTime}");
             Console.WriteLine($"Task Link: {webPageLink}");
             if (!waitForCompletion)
             {
