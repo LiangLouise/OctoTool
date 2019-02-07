@@ -27,7 +27,7 @@ namespace OctoTool
 
             if (settings.NeedRebootAfterDeployment)
             {
-                Console.WriteLine("Deployment Target Server(s) will be rebooted after deployment");
+                Console.WriteLine("Deployment Target Server(s) Will Reboot After Deployment");
                 settings.WaitingForFinish = true;
             }
             

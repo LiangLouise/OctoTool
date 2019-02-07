@@ -58,6 +58,11 @@ namespace OctoTool
             return new OctoMachines(res);
         }
 
+        public static OctoMachines GetMachinesByMachineName(string[] machineName)
+        {
+            return GetMachinesByMachineName(machineName.ToList());
+        }
+
         public static OctoMachines GetMachinesByMachineName(string machineName)
         {
             var machineNames = new List<string> {machineName};
@@ -78,7 +83,7 @@ namespace OctoTool
         public OctoTask CheckConnectivityToMachines(string description = null)
         {
             var repo = WebClient.GetWebClientRef().GetTaskRepo();
-            description = description ?? $"Checking Connectivity to {string.Join(", ", NameList.Take(4).ToArray())}";
+            description = description ?? $"Check Connectivity to {string.Join(", ", NameList.Take(4).ToArray())}";
             var timeOutAfterMinutes = int.Parse(ConfigurationManager.AppSettings["TimeOutAfterMinutes"]);
             var machineTimeoutAfterMinutes = int.Parse(ConfigurationManager.AppSettings["MachineTimeoutAfterMinutes"]);
             var task = new OctoTask(repo.ExecuteHealthCheck(description, timeOutAfterMinutes, machineTimeoutAfterMinutes, 
@@ -106,7 +111,7 @@ namespace OctoTool
         public OctoTask ExecuteScripts(string scriptBody, string description = null, string syntaxType = "PowerShell")
         {
             var repo = WebClient.GetWebClientRef().GetTaskRepo();
-            description = description ?? $"Running Scripts against {string.Join(", ", NameList.Take(4).ToArray())}";
+            description = description ?? $"Run Scripts against {string.Join(", ", NameList.Take(4).ToArray())}";
             var task = new OctoTask(repo.ExecuteAdHocScript(scriptBody, IdList.ToArray(), null, null, description, syntaxType));
             task.PrintCurrentState();
             return task;
@@ -118,8 +123,9 @@ namespace OctoTool
         /// <returns></returns>
         public bool RestartServer()
         {
-            Console.Out.WriteLine($"Start to Restarts Servers: {string.Join(", ", NameList.Take(4).ToArray())}");
-            ExecuteScripts(ConfigurationManager.AppSettings["RestartScript"]);
+            var des = $"Restart Servers: {string.Join(", ", NameList.Take(4).ToArray())}";
+            Console.Out.WriteLine($"Start to {des}");
+            ExecuteScripts(ConfigurationManager.AppSettings["RestartScript"], des);
             return WaitForMachinesBackOnline();
         }       
     }

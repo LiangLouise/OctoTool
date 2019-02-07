@@ -1,6 +1,10 @@
 {
   "DevOpsProjects": {
-    "initial": "Provisioning - Script",
+    "NeedReboot": [
+      "Provisioning - Script",
+      "Provisioning - Script",
+      "Provisioning - Script"
+    ],
     "others": [
       "Provisioning - Default Web Site",
       "Provisioning - Internal Web Site",
@@ -29,7 +33,7 @@
       "WaitingForFinish" : false,
       "UpdateVariableSetNow" : true,
       "Force" : false,
-      "DeployAt" : "1/30/2018 00:00:00"
+      "DeployAt" : "1/30/2019 00:00:00"
     },
     {
       "Name": "Telematics",
@@ -42,7 +46,7 @@
       "WaitingForFinish" : false
     },
     {
-      "Name": "SDS",
+      "Name": "Big Road - FC Services",
       "ProjectsToExclude" : [],
       "WaitingForFinish" : false
     },
@@ -67,19 +71,28 @@
       "WaitingForFinish" : false
     },
     {
-      "Name": "Mobile",
+      "Name": "FC Web",
       "ProjectsToExclude" : ["Mongo TranslationSync"],
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Database",
+      "WaitingForFinish" : false
+    },
+    {
+      "Name": "Provisioning Services",
       "WaitingForFinish" : false
     }
   ],
   "ProjectsToDeploy": [
-    {"Name":"DataService HOSEvent",
+    { 
+      "Name":"DataService HOSEvent",
       "SpecificMachineNames" : [],
       "SkipSteps" : [],
       "WaitingForFinish" : false,
       "UpdateVariableSetNow" : false,
       "Force" : false,
-      "DeployAt" : "1/30/2018 00:00:00"
+      "DeployAt" : "1/30/2019 00:00:00"
     }
   ]
 }

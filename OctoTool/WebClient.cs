@@ -10,13 +10,11 @@ namespace OctoTool
         private static WebClient _reference;
 
         private OctopusRepository _repo;
-        private OctopusClient _client;
         
         private WebClient(string url, string apiKey)
         {
             var endpoint = new OctopusServerEndpoint(url, apiKey);
             _repo = new OctopusRepository(endpoint);
-            _client = (OctopusClient) _repo.Client;
         }
 
         public static WebClient CreateWebClientRef(string url, string apiKey)
