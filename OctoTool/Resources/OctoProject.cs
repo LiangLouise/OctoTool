@@ -87,7 +87,7 @@ namespace OctoTool
             .AppSettings["ReleasesSelectionRange"])))
             {
                 var deploy = GetAllDeployment(release).FirstOrDefault(deployment => deployment.EnvironmentId == env.Id);
-                if (deploy != null && !env.Id.Equals(deploy.EnvironmentId)) continue;
+                if (deploy == null) continue;
                 if (lastDeployment == null) 
                 {      
                     lastDeployment = deploy;    
