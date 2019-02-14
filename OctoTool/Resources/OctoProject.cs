@@ -1,5 +1,5 @@
-using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Octopus.Client.Model;
 
@@ -37,13 +37,13 @@ namespace OctoTool
             return WebClient.GetWebClientRef().GetOctopusRepository().Projects.GetAllReleases(Curr);
         }
 
-        public ResourceCollection<DeploymentResource> GetAllDeployment(ReleaseResource release)
+        public IList<DeploymentResource> GetAllDeployment(ReleaseResource release)
         {
             return WebClient.GetWebClientRef().GetOctopusRepository().Releases
-                .GetDeployments(release);
+                .GetDeployments(release).Items;
         }
 
-        public ResourceCollection<DeploymentResource> GetAllDeployment(string releaseVersion)
+        public IList<DeploymentResource> GetAllDeployment(string releaseVersion)
         {
             return GetAllDeployment(GetReleaseByVersion(releaseVersion));
         }
@@ -78,28 +78,23 @@ namespace OctoTool
             
             if (releaseResource != null)
             {  
-                 return GetAllDeployment(releaseResource).Items.FirstOrDefault(deployment => deployment.EnvironmentId
+                 return GetAllDeployment(releaseResource).FirstOrDefault(deployment => deployment.EnvironmentId
                   == env.Id);
             }
 
             DeploymentResource lastDeployment = null;
-            foreach (var release in GetAllReleases().Take(5))
+            foreach (var release in GetAllReleases().Take(int.Parse(ConfigurationManager
+            .AppSettings["ReleasesSelectionRange"])))
             {
-                foreach (var deploy in GetAllDeployment(release).Items)
-                {
-                    if (env.Id.Equals(deploy.EnvironmentId))
-                    {
-                        if (lastDeployment == null)
-                        {
-                            lastDeployment = deploy;
-                        }
-
-                        if ((OctoTask.GetDeploymentTask(deploy).GetTaskFinishedTime() ?? DateTimeOffset.Now) >
-                            (OctoTask.GetDeploymentTask(lastDeployment).GetTaskFinishedTime() ?? DateTimeOffset.Now))
-                        {
-                            lastDeployment = deploy;
-                        }
-                    }
+                var deploy = GetAllDeployment(release).FirstOrDefault(deployment => deployment.EnvironmentId == env.Id);
+                if (deploy != null && !env.Id.Equals(deploy.EnvironmentId)) continue;
+                if (lastDeployment == null) 
+                {      
+                    lastDeployment = deploy;    
+                }                        
+                if (deploy.Created > lastDeployment.Created)                        
+                {                                                  
+                    lastDeployment = deploy;                        
                 }
             }
             return lastDeployment;
@@ -131,8 +126,7 @@ namespace OctoTool
                 {
                     l.Add(role);
                 }
-            }
-            
+            }            
             return l;
         }
     }

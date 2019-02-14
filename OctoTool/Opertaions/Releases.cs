@@ -16,7 +16,7 @@ namespace OctoTool
             var process = client.GetDeploymentProcessRepo().Get(project.GetDeploymentProcessId());
             var template = client.GetDeploymentProcessRepo().GetTemplate(process,targetChannel);
 
-            if (!project.IsDisabled() || settings.IgnoreChannelRules)
+            if (project.IsDisabled() && !settings.IgnoreChannelRules)
             {
                 return null;
             }
