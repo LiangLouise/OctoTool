@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using OctoTool.Data;
 using OctoTool.SettingExtensions;
@@ -31,9 +32,9 @@ namespace OctoTool.Scripts
             if(devops == null) return;
             
             var devopsProjects = devops.Value;
-            
+                       
+            if (!devopsProjects.Contains("NeedReboot")) return;
             var needReboot = devopsProjects["NeedReboot"];
-            if (needReboot == null) return;
             var settings = new MultiReleasePromotingSettings()
             {
                 SourceEnvironmentName = SourceEnvironmentName,
@@ -43,8 +44,8 @@ namespace OctoTool.Scripts
             };
             ChainDeployments.PromoteReleases(needReboot.ToObject<string[]>(), settings);
 
-            var others = devopsProjects["others"];            
-            if (others == null) return;
+            if (!devopsProjects.Contains("others")) return;
+            var others = devopsProjects["others"];
             settings.NeedRebootAfterDeployment = false;                            
             ChainDeployments.PromoteReleases(others.ToObject<string[]>(), settings);
 
