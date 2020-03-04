@@ -1,98 +1,42 @@
 {
-  "DevOpsProjects": {
+  "${Group Name}": {
     "NeedReboot": [
-      "Provisioning - Script",
-      "Provisioning - Script",
-      "Provisioning - Script"
+      "Project 1",
+      "Project 2"
     ],
     "others": [
-      "Provisioning - Default Web Site",
-      "Provisioning - Internal Web Site",
-      "Provisioning - Web Web Site",
-      "Provisioning - MachineConfig",
-      "Provisioning - Certificates",
-      "Provisioning - Host File",
-      "Common Application",
-      "Machine Schedule Task",
-      "DevOps SupportPassword",
-      "DevOps Health",
-      "DevOps Deploy NSSM",
-      "DevOps - Install .Net Framework",
-      "DevOps - Install .Net Core",
-      "Boomerang Metrics",
-      "AppInsight-IISInstall",
-      "DevOps Install Windows Management Framework"
+      "Project 1",
+      "Project 11",
+	  "Project 3",
+      "Project 4",
     ]
   },
   "ProjectsGroupsToDeploy": [
     {
-      "Name": "Data Services",
+      "Name": "${Group Name}",
       "SpecificMachineNames" : [],
-      "ProjectsToExclude" : ["DataService HOSEvent"],
+      "ProjectsToExclude" : ["Some project ot exclude"],
       "SpecificProjectsToInclude": [],
       "WaitingForFinish" : false,
       "UpdateVariableSetNow" : true,
       "Force" : false,
-      "DeployAt" : "1/30/2019 00:00:00"
+      "DeployAt" : "1/30/2020 00:00:00"
     },
     {
-      "Name": "Telematics",
+      "Name": "${Group Name}",
       "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "FC Desktop",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Big Road - FC Services",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Core Services",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Micro Services",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Mobile",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Mobile",
-      "ProjectsToExclude" : [],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "FC Web",
-      "ProjectsToExclude" : ["Mongo TranslationSync"],
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Database",
-      "WaitingForFinish" : false
-    },
-    {
-      "Name": "Provisioning Services",
       "WaitingForFinish" : false
     }
   ],
   "ProjectsToDeploy": [
     { 
-      "Name":"DataService HOSEvent",
+      "Name":"Project spcieal",
       "SpecificMachineNames" : [],
       "SkipSteps" : [],
       "WaitingForFinish" : false,
       "UpdateVariableSetNow" : false,
       "Force" : false,
-      "DeployAt" : "1/30/2019 00:00:00"
+      "DeployAt" : "1/30/2020 00:00:00"
     }
   ]
 }
